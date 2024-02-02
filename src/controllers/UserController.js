@@ -1,8 +1,9 @@
-import Jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import User from "../models/Users.js";
 import CreateUserToken from "../utils/CreateUserToken.js";
+import getToken from "../utils/GetToken.js";
 
 export default class UserController {
   static async register(req, res) {
@@ -99,5 +100,18 @@ export default class UserController {
     }
 
     await CreateUserToken(user, req, res);
+  }
+  static async getCurrentUserFromToken(req, res){
+    let currentUser;
+    if (req.headers.authorization) {
+        const token = getToken(req);
+        const decoded = jwt.verify(token, "secret");
+        currentUser = await User.findByPk(decoded.id)
+  
+        currentUser.password = undefined;
+      } else {
+        currentUser = null;
+      }
+      res.status(200).send(currentUser);
   }
 }
