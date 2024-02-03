@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import User from "../models/Users.js";
 import CreateUserToken from "../utils/CreateUserToken.js";
 import getToken from "../utils/GetToken.js";
+import getUserByToken from "../utils/GetUserByToken.js";
 
 export default class UserController {
   static async register(req, res) {
@@ -101,17 +102,43 @@ export default class UserController {
 
     await CreateUserToken(user, req, res);
   }
-  static async getCurrentUserFromToken(req, res){
+  static async getCurrentUserFromToken(req, res) {
     let currentUser;
     if (req.headers.authorization) {
-        const token = getToken(req);
-        const decoded = jwt.verify(token, "secret");
-        currentUser = await User.findByPk(decoded.id)
-  
-        currentUser.password = undefined;
-      } else {
-        currentUser = null;
-      }
-      res.status(200).send(currentUser);
+      const token = getToken(req);
+      const decoded = jwt.verify(token, "secret");
+      currentUser = await User.findByPk(decoded.id);
+
+      currentUser.password = undefined;
+    } else {
+      currentUser = null;
+    }
+    res.status(200).send(currentUser);
   }
+  static async addUserPhoto(req, res) {
+    // can update the photo too
+    const token = getToken(req);
+
+    const user = await getUserByToken(token);
+
+    const image = req.file;
+    if (!image) {
+      res.status(422).json({ message: "Selecione uma imagem" });
+    }
+    user.image = image.filename;
+
+    try {
+      await user.save();
+      res
+        .status(200)
+        .json({ message: "Imagem do usuário atualizada com sucesso." });
+    } catch (error) {
+      res.status(500).json({ message: "Erro no servidor" });
+      console.log(error);
+      return;
+    }
+  }
+
+  //eddit user
+  //get user by id
 }

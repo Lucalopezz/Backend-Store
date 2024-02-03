@@ -6,7 +6,7 @@ import sequelize from './database/conn.js';
 import Associations from './models/Associations.js';
 Associations();
 
-sequelize.sync()
+//sequelize.sync()
 
 const app = express();
 
