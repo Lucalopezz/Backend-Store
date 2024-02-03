@@ -139,6 +139,83 @@ export default class UserController {
     }
   }
 
-  //eddit user
+  static async editUser(req, res) {
+    const token = getToken(req);
+    const id = req.params.id;
+    const userEdit = await getUserByToken(token);
+    const {
+      username,
+      email,
+      firstName,
+      lastName,
+      oldPassword,
+      newPassword,
+      confirmpassword,
+    } = req.body;
+
+    if (id != userEdit.id) {
+      res
+        .status(422)
+        .json({ message: "Erro no servidor, tente novamente mais tarde!" });
+      return;
+    }
+
+    switch (true) {
+      case !username:
+        res.status(422).json({ message: "O nome é obrigatório!" });
+        return;
+
+      case !email:
+        res.status(422).json({ message: "O e-mail é obrigatório!" });
+        return;
+
+      case !firstName:
+        res.status(422).json({ message: "O telefone é obrigatório!" });
+        return;
+      case !lastName:
+        res.status(422).json({ message: "O telefone é obrigatório!" });
+        return;
+      case !oldPassword:
+        res.status(422).json({ message: "A senha é obrigatória!" });
+        return;
+
+      case newPassword !== confirmpassword:
+        res
+          .status(422)
+          .json({ message: "A confirmação e a senha são diferentes" });
+        return;
+      default:
+        break;
+    }
+
+    const checkPassword = await bcrypt.compare(oldPassword, userEdit.password); // the old pass is required for the edit
+    if (!checkPassword) {
+      return res.status(422).json({ message: "Senha inválida" });
+    }
+
+    if (newPassword) {                                                           // but if newPass exist, the camp confirmpass is required
+      const salt = await bcrypt.genSalt(12);                                     // the new pass is for update the pass
+      const reqPassword = newPassword;
+      const passwordHash = await bcrypt.hash(reqPassword, salt);
+  
+      userEdit.password = passwordHash;
+    }
+
+    userEdit.username = username;
+    userEdit.email = email;
+    userEdit.firstName = firstName;
+    userEdit.lastName = lastName;
+
+    try {
+      await userEdit.save();
+      res
+        .status(200)
+        .json({ message: "Perfil do usuário atualizado com sucesso." });
+    } catch (error) {
+      res.status(500).json({ message: "Erro no servidor" });
+      console.log(error);
+      return;
+    }
+  }
   //get user by id
 }
