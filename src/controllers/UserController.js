@@ -138,7 +138,6 @@ export default class UserController {
       return;
     }
   }
-
   static async editUser(req, res) {
     const token = getToken(req);
     const id = req.params.id;
@@ -193,11 +192,12 @@ export default class UserController {
       return res.status(422).json({ message: "Senha inválida" });
     }
 
-    if (newPassword) {                                                           // but if newPass exist, the camp confirmpass is required
-      const salt = await bcrypt.genSalt(12);                                     // the new pass is for update the pass
+    if (newPassword) {
+      // but if newPass exist, the camp confirmpass is required
+      const salt = await bcrypt.genSalt(12); // the new pass is for update the pass
       const reqPassword = newPassword;
       const passwordHash = await bcrypt.hash(reqPassword, salt);
-  
+
       userEdit.password = passwordHash;
     }
 
@@ -217,5 +217,4 @@ export default class UserController {
       return;
     }
   }
-  //get user by id
 }

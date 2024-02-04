@@ -1,9 +1,10 @@
-import express from 'express';
+import express from "express";
+
+import ProductController from "../controllers/ProductController.js";
+import checkAdmin from "../utils/CheckAdmin.js";
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Hello World');
-});
+router.post("/create", checkAdmin, ProductController.createProduct);
 
 export default router;

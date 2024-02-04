@@ -16,4 +16,5 @@ router.patch(
 );
 router.patch("/:id", checkToken, UserController.editUser);
 
+
 export default router;
