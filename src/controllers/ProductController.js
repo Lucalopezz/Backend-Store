@@ -44,4 +44,32 @@ export default class UserController {
       return;
     }
   }
+  static async listProducts(req, res) {
+    const products = await Product.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    res.status(200).json({ products: products });
+  }
+  static async deleteProducts(req, res) {
+    const id = req.params.id;
+
+    const product = await Product.findByPk(id);
+    if (!product) {
+      res.status(422).json({ message: "Produto não existe!" });
+      return;
+    }
+    try {
+      const result = await Product.destroy({
+        where: {
+          id: id,
+        },
+      });
+      res.status(200).json({ message: " O delete do produto, foi realizado!." });
+
+    } catch (error) {
+      console.error("Erro durante o delete de produto:", error);
+      res.status(500).json({ message: "Erro durante o delete do produto." });
+      return;
+    }
+  }
 }

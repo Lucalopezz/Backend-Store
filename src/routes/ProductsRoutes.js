@@ -14,4 +14,7 @@ router.post(
   ProductController.createProduct
 );
 
+router.get("/allProducts", ProductController.listProducts);
+router.delete("/delete/:id", checkAdmin, ProductController.deleteProducts);
+
 export default router;
