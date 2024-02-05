@@ -16,5 +16,11 @@ router.post(
 
 router.get("/allProducts", ProductController.listProducts);
 router.delete("/delete/:id", checkAdmin, ProductController.deleteProducts);
+router.patch(
+  "/edit/:id",
+  checkAdmin,
+  imageUpload.single("images"),
+  ProductController.editProduct
+);
 
 export default router;
