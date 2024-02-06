@@ -2,6 +2,7 @@ import User from './Users.js';
 import Cart from './Cart.js';
 import Product from './Products.js';
 import Order from './Order.js';
+import CartProduct from '../models/CartProduct.js';
 
 
 export default function() {
@@ -13,7 +14,7 @@ export default function() {
     Product.belongsToMany(Order, { through: 'ProductOrder' });
     
     Cart.belongsTo(User);
-    Cart.belongsToMany(Product, { through: 'CartProduct' });
+    Cart.belongsToMany(Product, { through: CartProduct });
     
     Order.belongsTo(User);
     Order.belongsToMany(Product, { through: 'ProductOrder' });
