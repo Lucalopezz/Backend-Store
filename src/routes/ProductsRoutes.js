@@ -28,5 +28,6 @@ router.patch(
 
 router.post("/cart/add", checkToken, CartController.addToCart)
 router.get("/cart", checkToken, CartController.getCartItems)
+router.delete("/cart/delete/:id", checkToken, CartController.deleteCartItems)
 
 export default router;

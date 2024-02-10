@@ -57,15 +57,44 @@ export default class CartController {
           .json({ message: "Carrinho não encontrado para este usuário." });
       }
       const totalPrice = cart.Products.reduce((total, product) => {
-        const productPrice = product.price || 0; 
-        const productQuantity = product.CartProduct.quantity || 1; 
-  
-        return total + (productPrice * productQuantity);
+        const productPrice = product.price || 0;
+        const productQuantity = product.CartProduct.quantity || 1;
+
+        return total + productPrice * productQuantity;
       }, 0);
-      
+
       res.status(200).json({ cart, totalPrice });
     } catch (error) {
       console.error("Erro ao obter itens do carrinho:", error);
+      res.status(500).json({ error: "Erro interno do servidor." });
+    }
+  }
+  static async deleteCartItems(req, res) {
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    const cart = await Cart.findOne({ where: { UserId: user.id } });
+
+    if (!cart) {
+      return res
+        .status(404)
+        .json({ message: "Carrinho não encontrado para este usuário." });
+    }
+ 
+    const productIdToDelete = req.params;
+
+    try {
+      await CartProduct.destroy({
+        where: {
+          CartId: cart.id,
+          ProductId: productIdToDelete.id,
+        },
+      });
+      res
+        .status(200)
+        .json({ message: "Item do carrinho excluído com sucesso." });
+    } catch (error) {
+      console.error("Erro ao excluir item do carrinho:", error);
       res.status(500).json({ error: "Erro interno do servidor." });
     }
   }
