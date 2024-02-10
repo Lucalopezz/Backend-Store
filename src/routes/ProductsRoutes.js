@@ -7,6 +7,7 @@ import checkToken from "../utils/CheckToken.js";
 
 import { imageUpload } from "../utils/ImageUpload.js";
 import CartController from "../controllers/CartController.js";
+import OrderController from "../controllers/OrderController.js";
 
 const router = express.Router();
 
@@ -29,5 +30,8 @@ router.patch(
 router.post("/cart/add", checkToken, CartController.addToCart)
 router.get("/cart", checkToken, CartController.getCartItems)
 router.delete("/cart/delete/:id", checkToken, CartController.deleteCartItems)
+
+
+router.post("/order/create", checkToken, OrderController.createOrder)
 
 export default router;
