@@ -109,7 +109,7 @@ export default class UserController {
         .json({ message: "Produto atualizado com sucesso." });
     } catch (error) {
       console.error("Erro ao editar produto:", error);
-      return res.status(500).json({ error: "Erro interno do servidor." });
+      return res.status(500).json({ message: "Erro interno do servidor." });
     }
   }
 }

@@ -37,7 +37,7 @@ export default class CartController {
         .json({ message: "Produto adicionado ao carrinho com sucesso." });
     } catch (error) {
       console.error("Erro ao adicionar produto ao carrinho:", error);
-      res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ message: "Erro interno do servidor." });
     }
   }
   static async getCartItems(req, res) {
@@ -66,7 +66,7 @@ export default class CartController {
       res.status(200).json({ cart, totalPrice });
     } catch (error) {
       console.error("Erro ao obter itens do carrinho:", error);
-      res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ message: "Erro interno do servidor." });
     }
   }
   static async deleteCartItems(req, res) {
@@ -95,7 +95,7 @@ export default class CartController {
         .json({ message: "Item do carrinho excluído com sucesso." });
     } catch (error) {
       console.error("Erro ao excluir item do carrinho:", error);
-      res.status(500).json({ error: "Erro interno do servidor." });
+      res.status(500).json({ message: "Erro interno do servidor." });
     }
   }
 }

@@ -33,5 +33,8 @@ router.delete("/cart/delete/:id", checkToken, CartController.deleteCartItems)
 
 
 router.post("/order/create", checkToken, OrderController.createOrder)
+router.get("/orders", checkToken, OrderController.listOrders)
+router.patch("/order/update", checkAdmin, OrderController.updateOrderStatus)
+
 
 export default router;
