@@ -124,6 +124,7 @@ export default class UserController {
     const image = req.file;
     if (!image) {
       res.status(422).json({ message: "Selecione uma imagem" });
+      return
     }
     user.image = image.filename;
 
