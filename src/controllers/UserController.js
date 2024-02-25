@@ -132,9 +132,9 @@ export default class UserController {
       await user.save();
       res
         .status(200)
-        .json({ message: "Imagem do usuário atualizada com sucesso." });
+        .json({ message: "Imagem do usuário atualizada com sucesso.", image: user.image  });
     } catch (error) {
-      res.status(500).json({ message: "Erro no servidor" });
+      res.status(500).json({ message: "Erro no servidor"});
       console.log(error);
       return;
     }
